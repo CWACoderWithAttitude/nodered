@@ -1,0 +1,202 @@
+[
+    {
+        "id": "8adeb3aa.654148",
+        "type": "tab",
+        "label": "Keller Aussenlüfter",
+        "disabled": false,
+        "info": "Abfragen der Luftfeuchte\nWenn weniger als 64% -> Lüfter Aus\nWenn >= 64% -> Lüfter Ein"
+    },
+    {
+        "id": "2ad5574e.cc639",
+        "type": "http request",
+        "z": "8adeb3aa.654148",
+        "name": "",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://192.168.178.89/cm?cmnd=status%2010",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 410,
+        "y": 900,
+        "wires": [
+            [
+                "26a9b0f7.ee8588",
+                "d05cb75.08c1248",
+                "eb89f7cc.52691"
+            ]
+        ]
+    },
+    {
+        "id": "26a9b0f7.ee8588",
+        "type": "debug",
+        "z": "8adeb3aa.654148",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.StatusSNS.AM2301.Humidity",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 960,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "341d6d18.fb9682",
+        "type": "inject",
+        "z": "8adeb3aa.654148",
+        "name": "jede 5 Minuten",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "300",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 900,
+        "wires": [
+            [
+                "2ad5574e.cc639"
+            ]
+        ]
+    },
+    {
+        "id": "d05cb75.08c1248",
+        "type": "switch",
+        "z": "8adeb3aa.654148",
+        "name": "",
+        "property": "payload.StatusSNS.AM2301.Humidity",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lt",
+                "v": "60",
+                "vt": "num"
+            },
+            {
+                "t": "gte",
+                "v": "60",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 610,
+        "y": 1000,
+        "wires": [
+            [
+                "6ba81ac7.3f1c6c"
+            ],
+            [
+                "56c0f533.62c484"
+            ]
+        ]
+    },
+    {
+        "id": "56c0f533.62c484",
+        "type": "http request",
+        "z": "8adeb3aa.654148",
+        "name": "Lüfter Ein",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://192.168.178.89/cm?cmnd=Power%20On",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 880,
+        "y": 1060,
+        "wires": [
+            [
+                "709f77c.5218b88"
+            ]
+        ]
+    },
+    {
+        "id": "6ba81ac7.3f1c6c",
+        "type": "http request",
+        "z": "8adeb3aa.654148",
+        "name": "Lüfter Aus",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://192.168.178.89/cm?cmnd=Power%20Off",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 890,
+        "y": 980,
+        "wires": [
+            [
+                "e6047d34.372e88"
+            ]
+        ]
+    },
+    {
+        "id": "e6047d34.372e88",
+        "type": "debug",
+        "z": "8adeb3aa.654148",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1110,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "709f77c.5218b88",
+        "type": "debug",
+        "z": "8adeb3aa.654148",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1130,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "eb89f7cc.52691",
+        "type": "debug",
+        "z": "8adeb3aa.654148",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 1100,
+        "wires": []
+    }
+]
